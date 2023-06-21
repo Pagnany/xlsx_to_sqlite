@@ -1,4 +1,4 @@
-use calamine::{open_workbook, Error, RangeDeserializerBuilder, Reader, Xlsx};
+use calamine::{open_workbook, Reader, Xlsx};
 use rusqlite::Connection;
 use std::time::Instant;
 
@@ -20,13 +20,11 @@ fn main() {
     let now = Instant::now();
     let mut gebinde = Vec::new();
 
-    //let mut excel: Xlsx<_> = open_workbook("file.xlsx").unwrap();
     let mut excel: Xlsx<_> = open_workbook("filelarge.xlsx").unwrap();
     if let Some(Ok(r)) = excel.worksheet_range("EIS-DTA") {
         for row in r.rows() {
             gebinde.push(row[68].to_string());
             gebinde.push(row[130].to_string());
-            //println!("test={}", test);
         }
     }
 
