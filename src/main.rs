@@ -7,7 +7,7 @@ fn main() {
         Ok(conn) => conn,
         Err(e) => panic!("Error opening database: {:?}", e),
     };
-    /* 
+    /*
     conn.execute(
         "CREATE TABLE test (
             id    INTEGER PRIMARY KEY,
@@ -17,17 +17,22 @@ fn main() {
     ).unwrap();
     */
 
-    let now = Instant::now();
-    let mut gebinde = Vec::new();
+    let mut sql_table_create = String::from("CREATE TABLE test (id INTEGER PRIMARY KEY, ");
 
-    let mut excel: Xlsx<_> = open_workbook("filelarge.xlsx").unwrap();
+    let now = Instant::now();
+
+    let mut i = 1;
+    let mut excel: Xlsx<_> = open_workbook("EIS-DTA_4500M.xlsx").unwrap();
     if let Some(Ok(r)) = excel.worksheet_range("EIS-DTA") {
-        for row in r.rows() {
-            gebinde.push(row[68].to_string());
-            gebinde.push(row[130].to_string());
+        for cell in r.used_cells() {
+            if cell.0 == 0 {
+                sql_table_create.push_str(&format!("c{} TEXT NOT NULL, ", i));
+                i += 1;
+            }
         }
     }
-
+    println!("{}", sql_table_create);
+    /*
     let tx = conn.transaction().unwrap();
     let mut stmt = tx.prepare("INSERT INTO test (name) VALUES (?1)").unwrap();
     for geb in gebinde {
@@ -35,16 +40,7 @@ fn main() {
     }
     stmt.finalize().unwrap();
     tx.commit().unwrap();
-
-    let mut stmt = conn.prepare("SELECT distinct name FROM test").unwrap();
-    let gebinde: Vec<String> = stmt
-        .query_map([], |row| row.get(0))
-        .unwrap()
-        .map(|x| x.unwrap())
-        .collect();
-    for geb in gebinde {
-        println!("Gebinde: {}", geb);
-    }
+    */
 
     let elapsed = now.elapsed();
 
