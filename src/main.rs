@@ -26,7 +26,6 @@ fn main() {
     }
 
     sql_table_create.push_str(")");
-    println!("{}", sql_table_create);
 
     match conn.execute(&sql_table_create, ()) {
         Ok(_) => (),
@@ -35,7 +34,6 @@ fn main() {
 
     sql_insert_into.pop();
     sql_insert_into.push_str(")");
-    println!("{}", sql_insert_into);
 
     let tx = conn.transaction().unwrap();
     let mut stmt = tx.prepare(sql_insert_into.as_str()).unwrap();
