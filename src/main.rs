@@ -31,9 +31,10 @@ fn main() {
         "CREATE TABLE IF NOT EXISTS {} (id text PRIMARY KEY ",
         db_name
     );
-    //String::from("CREATE TABLE IF NOT EXISTS data (id text PRIMARY KEY ");
     let mut sql_insert_into = format!("INSERT INTO {} VALUES (", db_name);
-    //String::from("INSERT INTO data VALUES (");
+
+    println!("Bitte warten. Die Xlsx-Datei wird eingelesen.");
+    println!("DAS FENSTER NICHT SCHLIESSEN!");
 
     let mut excel: Xlsx<_> = open_workbook(xlsx_path).expect("Datei kann nicht geöffnet werden");
     let xlsx_range = excel
