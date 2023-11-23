@@ -74,6 +74,9 @@ fn main() {
         if cell.0 == current_line {
             werte.push(cell.2.to_string());
         } else {
+            while werte.len() < xlsx_range.width() + 1 {
+                werte.push("".to_string());
+            }
             stmt.execute(params_from_iter(werte.iter()))
                 .expect("Fehler beim Ausführen des Statements.");
 
